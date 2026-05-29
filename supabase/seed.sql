@@ -1,0 +1,9 @@
+-- Local development seed only.
+-- Production admin bootstrap should be done with the Supabase Dashboard SQL editor
+-- after the first admin user signs up:
+--
+-- insert into public.user_roles (user_id, role)
+-- select id, 'admin'
+-- from auth.users
+-- where email = 'admin@example.com'
+-- on conflict (user_id, role) do nothing;
