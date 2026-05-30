@@ -9,6 +9,14 @@ export const passwordSchema = z
   .regex(/[A-Za-z]/)
   .regex(/[0-9]/);
 
+export const usernameSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(3)
+  .max(32)
+  .regex(/^[a-z0-9_]+$/);
+
 export const signInSchema = z.object({
   email: emailSchema,
   password: z.string().min(1),
@@ -16,6 +24,7 @@ export const signInSchema = z.object({
 
 export const signUpSchema = z.object({
   displayName: z.string().trim().min(2).max(80),
+  username: usernameSchema,
   email: emailSchema,
   password: passwordSchema,
 });

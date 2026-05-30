@@ -124,7 +124,7 @@ export function QuizRunner({
       }));
 
       if (isScored) {
-        setLiveScore((score) => score + (response.isCorrect ? 10 : -3));
+        setLiveScore((score) => score + (response.isCorrect ? 10 : -2));
       }
 
       window.setTimeout(() => {

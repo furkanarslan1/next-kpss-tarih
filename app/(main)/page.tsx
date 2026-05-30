@@ -6,11 +6,13 @@ import {
   MapIcon,
   ShuffleIcon,
   TrophyIcon,
+  UsersIcon,
 } from "lucide-react";
 import type { ComponentType } from "react";
 import { signOutAction } from "@/app/(actions)/actions/auth/auth";
 import { Button } from "@/components/ui/button";
 import { getCurrentUserRole } from "@/lib/auth/roles";
+import { getUserRank } from "@/lib/ranks";
 import { createClient } from "@/lib/supabase/server";
 
 type AttemptSummaryRow = {
@@ -64,6 +66,7 @@ export default async function Home() {
   );
   const accuracy =
     totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+  const rank = getUserRank(profile?.total_points ?? 0);
 
   return (
     <main className="min-h-svh bg-[#f7f6f2]">
@@ -112,6 +115,7 @@ export default async function Home() {
             label="Toplam puan"
             value={profile?.total_points ?? 0}
           />
+          <StatCard icon={MedalIconFallback} label="Rutbe" value={rank.title} />
           <StatCard icon={BrainIcon} label="Cozulen test" value={attempts.length} />
           <StatCard icon={FlameIcon} label="Dogru orani" value={`%${accuracy}`} />
           <StatCard
@@ -141,6 +145,12 @@ export default async function Home() {
             description="Konu testlerinde hangi bolumleri actigini ve gecmisini gor."
           />
           <ActionCard
+            href={user ? "/leaderboard" : "/login"}
+            icon={UsersIcon}
+            title="Leaderboard"
+            description="Puanini ve rutbeni diger kullanicilarla karsilastir."
+          />
+          <ActionCard
             href={user ? "/flashcards" : "/login"}
             icon={BookOpenIcon}
             title="Bilgi kartlari"
@@ -156,6 +166,10 @@ export default async function Home() {
       </div>
     </main>
   );
+}
+
+function MedalIconFallback({ className }: { className?: string }) {
+  return <TrophyIcon className={className} />;
 }
 
 function StatCard({

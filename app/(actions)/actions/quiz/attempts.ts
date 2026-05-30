@@ -13,7 +13,7 @@ import { quizAttemptSchema } from "@/lib/validations/learning";
 import { uuidSchema } from "@/lib/validations/primitives";
 
 const CORRECT_POINTS = 10;
-const WRONG_PENALTY = 3;
+const WRONG_PENALTY = 2;
 
 const checkQuizAnswerSchema = z.object({
   mode: z.enum(["topic", "random"]),
@@ -217,30 +217,38 @@ export async function submitQuizAttemptAction(
     };
   }
 
-  const { error: answersError } = await supabase
-    .from("quiz_attempt_answers")
-    .insert(
-      validQuestions.map((question) => {
-        const selectedOptionId = selectedByQuestionId.get(question.id) ?? null;
+  const missedAnswers = validQuestions
+    .map((question) => {
+      const selectedOptionId = selectedByQuestionId.get(question.id) ?? null;
+      const isCorrect =
+        selectedOptionId != null && selectedOptionId === question.correctOptionId;
 
-        return {
-          attempt_id: attempt.id,
-          question_id: question.id,
-          selected_option_id: selectedOptionId,
-          is_correct:
-            selectedOptionId != null &&
-            selectedOptionId === question.correctOptionId,
-        };
-      }),
-    );
+      if (isCorrect) {
+        return null;
+      }
 
-  if (answersError) {
-    await supabase.from("quiz_attempts").delete().eq("id", attempt.id);
+      return {
+        attempt_id: attempt.id,
+        question_id: question.id,
+        selected_option_id: selectedOptionId,
+        is_correct: false,
+      };
+    })
+    .filter((answer) => answer !== null);
 
-    return {
-      ok: false,
-      message: answersError.message,
-    };
+  if (missedAnswers.length > 0) {
+    const { error: answersError } = await supabase
+      .from("quiz_attempt_answers")
+      .insert(missedAnswers);
+
+    if (answersError) {
+      await supabase.from("quiz_attempts").delete().eq("id", attempt.id);
+
+      return {
+        ok: false,
+        message: answersError.message,
+      };
+    }
   }
 
   if (pointDelta !== 0) {

@@ -47,6 +47,7 @@ export async function signUpAction(
 ): Promise<AuthFormState> {
   const parsed = signUpFormSchema.safeParse({
     displayName: formData.get("displayName"),
+    username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
@@ -60,13 +61,32 @@ export async function signUpAction(
   }
 
   const supabase = await createClient();
-  const { displayName, email, password } = parsed.data;
+  const { displayName, email, password, username } = parsed.data;
+  const { data: isUsernameAvailable, error: usernameLookupError } =
+    await supabase.rpc("is_username_available", {
+      check_username: username,
+    });
+
+  if (usernameLookupError) {
+    return { message: usernameLookupError.message };
+  }
+
+  if (!isUsernameAvailable) {
+    return {
+      errors: {
+        username: ["Bu kullanici adi kullaniliyor."],
+      },
+      message: "Farkli bir kullanici adi secin.",
+    };
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
         display_name: displayName,
+        username,
       },
     },
   });
@@ -80,6 +100,16 @@ export async function signUpAction(
       message:
         "Uyelik olusturuldu. Devam etmek icin e-posta adresinizi dogrulayin.",
     };
+  }
+
+  if (data.user) {
+    await supabase
+      .from("profiles")
+      .update({
+        username,
+        display_name: displayName,
+      })
+      .eq("id", data.user.id);
   }
 
   revalidatePath("/", "layout");

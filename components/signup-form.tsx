@@ -76,6 +76,25 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               </FieldDescription>
             </Field>
             <Field>
+              <FieldLabel htmlFor="username">Kullanici adi</FieldLabel>
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="furkan_arslan"
+                autoComplete="username"
+                required
+              />
+              <FieldError
+                errors={state.errors?.username?.map((message) => ({
+                  message,
+                }))}
+              />
+              <FieldDescription>
+                Leaderboardda bu isim gorunecek. Harf, rakam ve alt cizgi kullan.
+              </FieldDescription>
+            </Field>
+            <Field>
               <FieldLabel htmlFor="password">Sifre</FieldLabel>
               <Input
                 id="password"

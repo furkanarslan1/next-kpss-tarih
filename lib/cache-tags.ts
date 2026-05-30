@@ -9,3 +9,5 @@ export function quizQuestionsTag(topicId: string) {
 }
 
 export const adminQuizQuestionsTag = "admin:quiz-questions";
+
+export const leaderboardTag = "leaderboard";

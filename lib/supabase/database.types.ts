@@ -756,6 +756,12 @@ export type Database = {
         }
         Returns: string
       }
+      is_username_available: {
+        Args: {
+          check_username: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "editor" | "member"
