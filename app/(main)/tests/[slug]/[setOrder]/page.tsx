@@ -94,17 +94,17 @@ export default async function TopicTestSetPage({
   );
 
   return (
-    <main className="flex min-h-svh flex-col bg-[#f7f6f2]">
+    <main className="flex min-h-svh flex-col bg-[#fff7ed]">
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-4 sm:px-6 sm:py-6">
-        <header className="grid gap-3 rounded-lg border bg-white/65 p-4 shadow-sm backdrop-blur sm:flex sm:items-start sm:justify-between sm:p-5">
+        <header className="grid gap-3 rounded-lg border border-orange-200/80 bg-white/60 p-4 shadow-lg shadow-orange-950/5 backdrop-blur-xl sm:flex sm:items-start sm:justify-between sm:p-5">
           <div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-orange-900/60">
               {deck.topic.periodTitle} / {deck.topic.title}
             </p>
             <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
               {deck.quizSet?.title ?? `${numericSetOrder}. Test`}
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-orange-900/60">
               Sure ve puan bu modda tutulur.
             </p>
           </div>

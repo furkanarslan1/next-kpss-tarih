@@ -1,0 +1,158 @@
+delete from public.practice_questions
+where id in (
+  '00000000-0000-4000-8000-000000001001',
+  '00000000-0000-4000-8000-000000001002',
+  '00000000-0000-4000-8000-000000001003',
+  '00000000-0000-4000-8000-000000001004',
+  '00000000-0000-4000-8000-000000001005',
+  '00000000-0000-4000-8000-000000001006',
+  '00000000-0000-4000-8000-000000001007',
+  '00000000-0000-4000-8000-000000001008',
+  '00000000-0000-4000-8000-000000001009',
+  '00000000-0000-4000-8000-000000001010'
+);
+
+insert into public.practice_questions (
+  id,
+  topic_id,
+  question_type,
+  prompt,
+  correct_answer,
+  accepted_answers,
+  hint,
+  explanation,
+  time_limit_seconds,
+  sort_order,
+  status
+)
+values
+  (
+    '00000000-0000-4000-8000-000000001001',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Osmanli Beyligi''nin kurucusu kabul edilen hukumdar kimdir?',
+    'Osman Bey',
+    array['Osman Bey', 'Osman Gazi', 'I. Osman'],
+    'Kurucu bey',
+    'Osman Bey, beyligin siyasi kimligini belirginlestiren kurucu kabul edilir.',
+    40,
+    0,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001002',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Osmanlilarin Rumeli''de ilk elde ettigi kale hangisidir?',
+    'Cimpe Kalesi',
+    array['Cimpe Kalesi', 'Cimpe'],
+    'Rumeliye gecis',
+    'Cimpe Kalesi, Osmanlinin Rumelide tutunmasinda onemli bir us oldu.',
+    45,
+    1,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001003',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Bursa''nin fethi hangi Osmanli hukumdari doneminde tamamlanmistir?',
+    'Orhan Bey',
+    array['Orhan Bey', 'Orhan Gazi'],
+    'Bursa 1326',
+    'Bursa 1326 yilinda Orhan Bey doneminde Osmanli hakimiyetine girdi.',
+    45,
+    2,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001004',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    '1302 Koyunhisar Savasi hangi Osmanli hukumdari doneminde yapilmistir?',
+    'Osman Bey',
+    array['Osman Bey', 'Osman Gazi', 'I. Osman'],
+    'Ilk Osmanli-Bizans savaslarindan',
+    'Koyunhisar Savasi Osman Bey doneminde Bizans kuvvetlerine karsi kazanildi.',
+    45,
+    3,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001005',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Osmanlida ilk duzenli yaya ve musellem birlikleri hangi hukumdar doneminde kuruldu?',
+    'Orhan Bey',
+    array['Orhan Bey', 'Orhan Gazi'],
+    'Ilk duzenli ordu',
+    'Yaya ve musellem birlikleri Orhan Bey doneminde kuruldu.',
+    45,
+    4,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001006',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Karesi Beyligi''nin katilmasi Osmanliya hangi alanda onemli tecrube kazandirdi?',
+    'Denizcilik',
+    array['Denizcilik', 'Donanma', 'Denizcilik tecrubesi'],
+    'Rumeliye geciste etkili',
+    'Karesi Beyliginin katilmasi denizcilik tecrubesi ve Rumeliye gecis imkani sagladi.',
+    50,
+    5,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001007',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Edirne hangi Osmanli hukumdari doneminde fethedilmistir?',
+    'I. Murad',
+    array['I. Murad', '1. Murad', 'Murad Hudavendigar', 'Hudavendigar'],
+    'Balkan fetihleri',
+    'Edirne I. Murad doneminde fethedilerek Balkanlarda stratejik merkez oldu.',
+    45,
+    6,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001008',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Osmanli tarihinde Fetret Devri hangi savastan sonra baslamistir?',
+    'Ankara Savasi',
+    array['Ankara Savasi', '1402 Ankara Savasi'],
+    '1402',
+    'Ankara Savasi sonrasi Yildirim Bayezid esir dustu ve Fetret Devri basladi.',
+    45,
+    7,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001009',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Fetret Devri''ne son veren Osmanli hukumdari kimdir?',
+    'Celebi Mehmed',
+    array['Celebi Mehmed', 'I. Mehmed', '1. Mehmed', 'Mehmed Celebi'],
+    'Ikinci kurucu kabul edilir',
+    'Celebi Mehmed kardesler arasindaki mucadeleyi bitirerek devleti toparladi.',
+    50,
+    8,
+    'published'
+  ),
+  (
+    '00000000-0000-4000-8000-000000001010',
+    '00000000-0000-4000-8000-000000000211',
+    'fill_blank',
+    'Osmanli Beyligi''nin Bizans sinirinda yer almasi hangi anlayisla buyumesini kolaylastirdi?',
+    'Gaza',
+    array['Gaza', 'Gaza anlayisi', 'Gaza ve cihat'],
+    'Uc beyligi',
+    'Bizans sinirinda olmak gaza anlayisi etrafinda destek toplanmasini kolaylastirdi.',
+    45,
+    9,
+    'published'
+  );

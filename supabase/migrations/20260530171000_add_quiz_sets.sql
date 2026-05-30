@@ -37,10 +37,10 @@ alter table public.quiz_sets enable row level security;
 create policy "published quiz sets are public"
   on public.quiz_sets for select
   to anon, authenticated
-  using (status = 'published' or public.is_admin(auth.uid()));
+  using (status = 'published' or private.is_admin(auth.uid()));
 
 create policy "admins manage quiz sets"
   on public.quiz_sets for all
   to authenticated
-  using (public.is_admin(auth.uid()))
-  with check (public.is_admin(auth.uid()));
+  using (private.is_admin(auth.uid()))
+  with check (private.is_admin(auth.uid()));

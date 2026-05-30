@@ -11,3 +11,9 @@ export function quizQuestionsTag(topicId: string) {
 export const adminQuizQuestionsTag = "admin:quiz-questions";
 
 export const leaderboardTag = "leaderboard";
+
+export function practiceQuestionsTag(topicId: string) {
+  return `practice-questions:${topicId}`;
+}
+
+export const adminPracticeQuestionsTag = "admin:practice-questions";

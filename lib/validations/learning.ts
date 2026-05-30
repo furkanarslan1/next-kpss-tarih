@@ -73,6 +73,32 @@ export const createQuizQuestionSchema = z
     }
   });
 
+export const fillBlankQuestionSchema = z
+  .object({
+    topicId: uuidSchema,
+    prompt: z.string().trim().min(5).max(2000),
+    correctAnswer: z.string().trim().min(1).max(120),
+    acceptedAnswersText: optionalTextSchema,
+    hint: optionalTextSchema,
+    explanation: optionalTextSchema,
+    timeLimitSeconds: z.coerce.number().int().min(10).max(300).default(45),
+    status: contentStatusSchema.default("draft"),
+  })
+  .superRefine((value, context) => {
+    const answers = normalizeAcceptedAnswers(
+      value.correctAnswer,
+      value.acceptedAnswersText,
+    );
+
+    if (answers.length > 8) {
+      context.addIssue({
+        code: "custom",
+        message: "En fazla 8 alternatif cevap girilebilir.",
+        path: ["acceptedAnswersText"],
+      });
+    }
+  });
+
 export const quizAttemptAnswerSchema = z.object({
   questionId: uuidSchema,
   selectedOptionId: uuidSchema.nullable().optional(),
@@ -94,10 +120,32 @@ export const flashcardReviewSchema = z.object({
 export type FlashcardInput = z.infer<typeof flashcardSchema>;
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
 export type CreateQuizQuestionInput = z.infer<typeof createQuizQuestionSchema>;
+export type FillBlankQuestionInput = z.infer<typeof fillBlankQuestionSchema>;
 export type QuizOptionInput = z.infer<typeof quizOptionSchema>;
 export type QuizAttemptInput = z.infer<typeof quizAttemptSchema>;
 export type FlashcardReviewInput = z.infer<typeof flashcardReviewSchema>;
 
 function normalizeOptionText(value: string) {
   return value.trim().toLocaleLowerCase("tr-TR").replace(/\s+/g, " ");
+}
+
+export function normalizeAcceptedAnswers(
+  correctAnswer: string,
+  acceptedAnswersText?: string | null,
+) {
+  const answers = [correctAnswer, ...(acceptedAnswersText ?? "").split("\n")]
+    .map((answer) => answer.trim())
+    .filter(Boolean);
+  const seen = new Set<string>();
+
+  return answers.filter((answer) => {
+    const normalized = normalizeOptionText(answer);
+
+    if (seen.has(normalized)) {
+      return false;
+    }
+
+    seen.add(normalized);
+    return true;
+  });
 }

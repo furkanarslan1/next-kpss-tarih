@@ -4,6 +4,7 @@ import {
   BrainIcon,
   FlameIcon,
   MapIcon,
+  PencilLineIcon,
   ShuffleIcon,
   TrophyIcon,
   UsersIcon,
@@ -143,6 +144,12 @@ export default async function Home() {
             icon={TrophyIcon}
             title="Ilerlemem"
             description="Konu testlerinde hangi bolumleri actigini ve gecmisini gor."
+          />
+          <ActionCard
+            href={user ? "/fill-blanks" : "/login"}
+            icon={PencilLineIcon}
+            title="Bosluk doldurma"
+            description="Kavramlari ipucuyla hatirla, sureye karsi cevap yaz."
           />
           <ActionCard
             href={user ? "/leaderboard" : "/login"}

@@ -280,6 +280,68 @@ export type Database = {
           },
         ]
       }
+      practice_questions: {
+        Row: {
+          accepted_answers: string[]
+          correct_answer: string
+          created_at: string
+          created_by: string | null
+          explanation: string | null
+          hint: string | null
+          id: string
+          prompt: string
+          question_type: "fill_blank" | "true_false"
+          sort_order: number
+          status: Database["public"]["Enums"]["content_status"]
+          time_limit_seconds: number
+          topic_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          accepted_answers?: string[]
+          correct_answer: string
+          created_at?: string
+          created_by?: string | null
+          explanation?: string | null
+          hint?: string | null
+          id?: string
+          prompt: string
+          question_type?: "fill_blank" | "true_false"
+          sort_order?: number
+          status?: Database["public"]["Enums"]["content_status"]
+          time_limit_seconds?: number
+          topic_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          accepted_answers?: string[]
+          correct_answer?: string
+          created_at?: string
+          created_by?: string | null
+          explanation?: string | null
+          hint?: string | null
+          id?: string
+          prompt?: string
+          question_type?: "fill_blank" | "true_false"
+          sort_order?: number
+          status?: Database["public"]["Enums"]["content_status"]
+          time_limit_seconds?: number
+          topic_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "practice_questions_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -756,11 +818,69 @@ export type Database = {
         }
         Returns: string
       }
+      check_fill_blank_answer: {
+        Args: {
+          p_question_id: string
+          p_answer: string
+        }
+        Returns: {
+          is_correct: boolean
+          correct_answer: string
+          explanation: string | null
+        }[]
+      }
+      get_fill_blank_deck: {
+        Args: {
+          p_slug: string
+        }
+        Returns: {
+          id: string
+          topic_id: string
+          topic_slug: string
+          topic_title: string
+          period_title: string
+          prompt: string
+          hint: string | null
+          answer_mask: string
+          time_limit_seconds: number
+          sort_order: number
+        }[]
+      }
+      guess_fill_blank_letter: {
+        Args: {
+          p_question_id: string
+          p_letter: string
+        }
+        Returns: {
+          matches: Json
+          is_match: boolean
+        }[]
+      }
       is_username_available: {
         Args: {
           check_username: string
         }
         Returns: boolean
+      }
+      list_fill_blank_topics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          topic_id: string
+          slug: string
+          title: string
+          summary: string | null
+          period_title: string
+          question_count: number
+        }[]
+      }
+      reveal_fill_blank_answer: {
+        Args: {
+          p_question_id: string
+        }
+        Returns: {
+          correct_answer: string
+          explanation: string | null
+        }[]
       }
     }
     Enums: {

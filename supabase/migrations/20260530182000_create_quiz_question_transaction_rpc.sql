@@ -19,7 +19,7 @@ declare
   v_option jsonb;
   v_option_index integer := 0;
 begin
-  if not public.is_admin(auth.uid()) then
+  if not private.is_admin(auth.uid()) then
     raise exception 'Admin yetkisi gerekiyor.';
   end if;
 

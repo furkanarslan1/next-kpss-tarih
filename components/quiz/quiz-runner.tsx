@@ -88,6 +88,11 @@ export function QuizRunner({
       return;
     }
 
+    const nextSelectedAnswers = {
+      ...selectedAnswers,
+      [questionId]: optionId,
+    };
+
     setSelectedAnswers((answers) => ({
       ...answers,
       [questionId]: optionId,
@@ -128,18 +133,17 @@ export function QuizRunner({
       }
 
       window.setTimeout(() => {
-        setCurrentIndex((index) => {
-          if (index !== currentIndex || currentIndex >= orderedQuestions.length - 1) {
-            return index;
-          }
+        if (currentIndex >= orderedQuestions.length - 1) {
+          finishQuiz(nextSelectedAnswers);
+          return;
+        }
 
-          return index + 1;
-        });
+        setCurrentIndex((index) => (index === currentIndex ? index + 1 : index));
       }, 650);
     });
   }
 
-  function finishQuiz() {
+  function finishQuiz(answersToSubmit = selectedAnswers) {
     setMessage(null);
 
     startTransition(async () => {
@@ -150,7 +154,7 @@ export function QuizRunner({
         elapsedSeconds,
         answers: orderedQuestions.map((question) => ({
           questionId: question.id,
-          selectedOptionId: selectedAnswers[question.id] ?? null,
+          selectedOptionId: answersToSubmit[question.id] ?? null,
         })),
       });
 
@@ -189,20 +193,20 @@ export function QuizRunner({
   return (
     <div className="flex flex-1 flex-col gap-4" aria-label={title}>
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-lg border bg-white/65 p-3 shadow-sm backdrop-blur">
-          <p className="text-xs text-muted-foreground">Soru</p>
+        <div className="rounded-lg border border-orange-200/70 bg-white/60 p-3 shadow-sm shadow-orange-950/5 backdrop-blur-xl">
+          <p className="text-xs text-orange-900/60">Soru</p>
           <p className="mt-1 text-lg font-semibold">
             {currentIndex + 1}/{orderedQuestions.length}
           </p>
         </div>
-        <div className="rounded-lg border bg-white/65 p-3 shadow-sm backdrop-blur">
-          <p className="text-xs text-muted-foreground">Cevaplanan</p>
+        <div className="rounded-lg border border-orange-200/70 bg-white/60 p-3 shadow-sm shadow-orange-950/5 backdrop-blur-xl">
+          <p className="text-xs text-orange-900/60">Cevaplanan</p>
           <p className="mt-1 text-lg font-semibold">{answeredCount}</p>
         </div>
         {isScored ? (
           <>
-            <div className="rounded-lg border bg-white/65 p-3 shadow-sm backdrop-blur">
-              <p className="text-xs text-muted-foreground">Anlik puan</p>
+            <div className="rounded-lg border border-orange-200/70 bg-white/60 p-3 shadow-sm shadow-orange-950/5 backdrop-blur-xl">
+              <p className="text-xs text-orange-900/60">Anlik puan</p>
               <p
                 className={cn(
                   "mt-1 text-lg font-semibold",
@@ -213,8 +217,8 @@ export function QuizRunner({
                 {liveScore}
               </p>
             </div>
-            <div className="rounded-lg border bg-white/65 p-3 shadow-sm backdrop-blur">
-              <p className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="rounded-lg border border-orange-200/70 bg-white/60 p-3 shadow-sm shadow-orange-950/5 backdrop-blur-xl">
+              <p className="flex items-center gap-1 text-xs text-orange-900/60">
                 <ClockIcon className="size-3" />
                 Sure
               </p>
@@ -224,16 +228,16 @@ export function QuizRunner({
             </div>
           </>
         ) : (
-          <div className="rounded-lg border bg-white/65 p-3 shadow-sm backdrop-blur">
-            <p className="text-xs text-muted-foreground">Mod</p>
+          <div className="rounded-lg border border-orange-200/70 bg-white/60 p-3 shadow-sm shadow-orange-950/5 backdrop-blur-xl">
+            <p className="text-xs text-orange-900/60">Mod</p>
             <p className="mt-1 text-lg font-semibold">Pratik</p>
           </div>
         )}
       </section>
 
-      <section className="rounded-lg border bg-white/70 p-3 shadow-sm backdrop-blur sm:p-5">
+      <section className="rounded-lg border border-orange-200/80 bg-white/65 p-3 shadow-lg shadow-orange-950/5 backdrop-blur-xl sm:p-5">
         <div className="mb-4 flex flex-col gap-1">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-orange-900/60">
             {currentQuestion.periodTitle} / {currentQuestion.topicTitle}
           </p>
           <h2 className="text-base font-semibold leading-7 sm:text-lg">
@@ -258,8 +262,8 @@ export function QuizRunner({
                 type="button"
                 onClick={() => selectOption(currentQuestion.id, option.id)}
                 className={cn(
-                  "flex min-h-12 items-center gap-3 rounded-lg border bg-background px-3 py-2 text-left text-sm leading-6 transition-colors hover:bg-muted/40",
-                  isSelected && "border-primary bg-primary/5",
+                  "flex min-h-12 items-center gap-3 rounded-lg border border-orange-200/70 bg-white/75 px-3 py-2 text-left text-sm leading-6 shadow-sm shadow-orange-950/5 transition-colors hover:border-orange-300 hover:bg-orange-50/70",
+                  isSelected && "border-orange-500 bg-orange-50",
                   isCorrectOption && answerResult && "border-emerald-600 bg-emerald-50 text-emerald-950",
                   isWrongSelection && "border-destructive bg-destructive/10",
                 )}
@@ -268,7 +272,7 @@ export function QuizRunner({
                   pendingQuestionId === currentQuestion.id
                 }
               >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-md border text-xs font-medium">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-md border border-orange-200 bg-white/70 text-xs font-medium">
                   {String.fromCharCode(65 + optionIndex)}
                 </span>
                 <span className="leading-6">{option.text}</span>
@@ -298,32 +302,10 @@ export function QuizRunner({
           unlockRequiredCorrect={unlockRequiredCorrect}
         />
       ) : (
-        <div className="grid gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
-          <div className="grid grid-cols-2 gap-2 sm:flex">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setCurrentIndex((index) => Math.max(0, index - 1))}
-              disabled={currentIndex === 0}
-            >
-              Onceki
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                setCurrentIndex((index) =>
-                  Math.min(orderedQuestions.length - 1, index + 1),
-                )
-              }
-              disabled={currentIndex === orderedQuestions.length - 1}
-            >
-              Sonraki
-            </Button>
-          </div>
-          <Button type="button" onClick={finishQuiz} disabled={isPending} className="w-full sm:w-auto">
-            {isPending ? "Kaydediliyor..." : "Testi bitir"}
-          </Button>
+        <div className="rounded-lg border border-orange-200/70 bg-white/55 p-3 text-center text-sm text-orange-950/70 shadow-sm shadow-orange-950/5 backdrop-blur-xl">
+          {isPending
+            ? "Cevap kontrol ediliyor..."
+            : "Sikki secince otomatik sonraki soruya gecilir."}
         </div>
       )}
     </div>
