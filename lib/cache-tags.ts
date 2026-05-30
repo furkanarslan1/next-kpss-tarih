@@ -3,3 +3,9 @@ export function flashcardsTag(topicId: string) {
 }
 
 export const adminFlashcardsTag = "admin:flashcards";
+
+export function quizQuestionsTag(topicId: string) {
+  return `quiz-questions:${topicId}`;
+}
+
+export const adminQuizQuestionsTag = "admin:quiz-questions";

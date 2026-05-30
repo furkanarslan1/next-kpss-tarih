@@ -287,6 +287,7 @@ export type Database = {
           display_name: string | null
           id: string
           onboarding_completed: boolean
+          total_points: number
           updated_at: string
           username: string | null
         }
@@ -296,6 +297,7 @@ export type Database = {
           display_name?: string | null
           id: string
           onboarding_completed?: boolean
+          total_points?: number
           updated_at?: string
           username?: string | null
         }
@@ -305,6 +307,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           onboarding_completed?: boolean
+          total_points?: number
           updated_at?: string
           username?: string | null
         }
@@ -361,33 +364,61 @@ export type Database = {
       }
       quiz_attempts: {
         Row: {
+          blank_count: number
           completed_at: string | null
+          correct_count: number
           created_at: string
+          elapsed_seconds: number
           id: string
+          mode: string
+          point_delta: number
+          quiz_set_id: string | null
           score: number
-          topic_id: string
+          topic_id: string | null
           total_questions: number
           user_id: string
+          wrong_count: number
         }
         Insert: {
+          blank_count?: number
           completed_at?: string | null
+          correct_count?: number
           created_at?: string
+          elapsed_seconds?: number
           id?: string
+          mode?: string
+          point_delta?: number
+          quiz_set_id?: string | null
           score?: number
-          topic_id: string
+          topic_id?: string | null
           total_questions?: number
           user_id: string
+          wrong_count?: number
         }
         Update: {
+          blank_count?: number
           completed_at?: string | null
+          correct_count?: number
           created_at?: string
+          elapsed_seconds?: number
           id?: string
+          mode?: string
+          point_delta?: number
+          quiz_set_id?: string | null
           score?: number
-          topic_id?: string
+          topic_id?: string | null
           total_questions?: number
           user_id?: string
+          wrong_count?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_quiz_set_id_fkey"
+            columns: ["quiz_set_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_sets"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "quiz_attempts_topic_id_fkey"
             columns: ["topic_id"]
@@ -429,6 +460,50 @@ export type Database = {
           },
         ]
       }
+      quiz_sets: {
+        Row: {
+          created_at: string
+          id: string
+          question_count: number
+          set_order: number
+          status: Database["public"]["Enums"]["content_status"]
+          title: string
+          topic_id: string
+          unlock_required_correct: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question_count?: number
+          set_order?: number
+          status?: Database["public"]["Enums"]["content_status"]
+          title: string
+          topic_id: string
+          unlock_required_correct?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question_count?: number
+          set_order?: number
+          status?: Database["public"]["Enums"]["content_status"]
+          title?: string
+          topic_id?: string
+          unlock_required_correct?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_sets_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz_questions: {
         Row: {
           created_at: string
@@ -437,6 +512,7 @@ export type Database = {
           explanation: string | null
           id: string
           prompt: string
+          quiz_set_id: string | null
           sort_order: number
           status: Database["public"]["Enums"]["content_status"]
           topic_id: string
@@ -450,6 +526,7 @@ export type Database = {
           explanation?: string | null
           id?: string
           prompt: string
+          quiz_set_id?: string | null
           sort_order?: number
           status?: Database["public"]["Enums"]["content_status"]
           topic_id: string
@@ -463,6 +540,7 @@ export type Database = {
           explanation?: string | null
           id?: string
           prompt?: string
+          quiz_set_id?: string | null
           sort_order?: number
           status?: Database["public"]["Enums"]["content_status"]
           topic_id?: string
@@ -470,6 +548,13 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "quiz_questions_quiz_set_id_fkey"
+            columns: ["quiz_set_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_sets"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "quiz_questions_topic_id_fkey"
             columns: ["topic_id"]
@@ -659,7 +744,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_quiz_question_with_options: {
+        Args: {
+          p_topic_id: string
+          p_quiz_set_id: string
+          p_prompt: string
+          p_explanation: string | null
+          p_status: Database["public"]["Enums"]["content_status"]
+          p_options: Json
+          p_user_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "editor" | "member"
