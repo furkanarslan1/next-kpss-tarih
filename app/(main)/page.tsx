@@ -58,12 +58,15 @@ export default async function Home() {
               Konu bitince coktan secmeli sorularla kendini deneyeceksin.
             </p>
           </div>
-          <div className="rounded-lg border p-4">
+          <Link
+            href={user ? "/flashcards" : "/login"}
+            className="rounded-lg border p-4 transition-colors hover:bg-muted/40"
+          >
             <h2 className="font-medium">Bilgi kartlari</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               Sinav oncesi kisa tekrarlar icin kartlari kaydiracaksin.
             </p>
-          </div>
+          </Link>
         </section>
       </div>
     </main>

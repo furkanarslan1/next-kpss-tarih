@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
 export default function AdminPage() {
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
@@ -26,6 +29,9 @@ export default function AdminPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Konu tekrar kartlari yayin durumuna gore hazirlanacak.
           </p>
+          <Button asChild className="mt-4" size="sm">
+            <Link href="/admin/flashcards">Bilgi kartlarina git</Link>
+          </Button>
         </div>
       </section>
 

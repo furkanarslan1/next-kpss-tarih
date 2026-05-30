@@ -69,6 +69,12 @@ const data = {
       ],
     },
     {
+      title: "Bilgi kartlari",
+      url: "/admin/flashcards",
+      icon: BrainIcon,
+      items: [],
+    },
+    {
       title: "Harita",
       url: "/admin/maps",
       icon: MapIcon,
@@ -99,10 +105,6 @@ const data = {
         {
           title: "Secenekler",
           url: "/admin/options",
-        },
-        {
-          title: "Bilgi kartlari",
-          url: "/admin/flashcards",
         },
       ],
     },
@@ -168,7 +170,7 @@ export function AppSidebar({
           <SidebarMenu>
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={pathname === item.url}>
                   <Link href={item.url} className="font-medium">
                     <item.icon />
                     {item.title}
